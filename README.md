@@ -23,13 +23,13 @@ So it encapsulates this function. You can ping the requested domain name through
 
 The package is based on Apple's [SimplePing](https://developer.apple.com/library/archive/samplecode/SimplePing/Introduction/Intro.html#//apple_ref/doc/uid/DTS10000716) and optimized again, which makes it easier to use and can be called in three steps
  
-###1. Create a ping object with the hostname as the user-defined domain name
+### 1. Create a ping object with the hostname as the user-defined domain name
 
 ```
 let pingTools = HDPingTools(hostName: "www.apple.com")
 ```
 
-###2. Start Ping
+### 2. Start Ping
 
 
 ```
@@ -46,7 +46,7 @@ The `response` of the response contains the following contents
 * `responseTime` ping the response time
 * `responseBytes` Response bytes
 
-###3. Stop request
+### 3. Stop request
 
 ```
 pingTools.stop()
