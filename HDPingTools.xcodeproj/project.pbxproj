@@ -15,6 +15,7 @@
 		E4443E0925A2C0E00063C383 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4443E0725A2C0E00063C383 /* LaunchScreen.storyboard */; };
 		E4443E1525A2C58A0063C383 /* HDPingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4443E1425A2C58A0063C383 /* HDPingTools.swift */; };
 		E4443E1A25A2C7DF0063C383 /* SimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = E4443E1825A2C7DF0063C383 /* SimplePing.m */; };
+		E4443E2925A30EBD0063C383 /* PingFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4443E2825A30EBC0063C383 /* PingFoundation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,8 @@
 		E4443E1725A2C7DE0063C383 /* HDPingTools-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HDPingTools-Bridging-Header.h"; sourceTree = "<group>"; };
 		E4443E1825A2C7DF0063C383 /* SimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePing.m; sourceTree = "<group>"; };
 		E4443E1925A2C7DF0063C383 /* SimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePing.h; sourceTree = "<group>"; };
+		E4443E2825A30EBC0063C383 /* PingFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingFoundation.swift; sourceTree = "<group>"; };
+		E4443E2B25A314560063C383 /* HDPingTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDPingTools.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,8 @@
 				E4443E1925A2C7DF0063C383 /* SimplePing.h */,
 				E4443E1825A2C7DF0063C383 /* SimplePing.m */,
 				E4443E1425A2C58A0063C383 /* HDPingTools.swift */,
+				E4443E2825A30EBC0063C383 /* PingFoundation.swift */,
+				E4443E2B25A314560063C383 /* HDPingTools.h */,
 			);
 			path = HDPingTools;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 			files = (
 				E4443E0125A2C0DC0063C383 /* ViewController.swift in Sources */,
 				E4443DFD25A2C0DC0063C383 /* AppDelegate.swift in Sources */,
+				E4443E2925A30EBD0063C383 /* PingFoundation.swift in Sources */,
 				E4443DFF25A2C0DC0063C383 /* SceneDelegate.swift in Sources */,
 				E4443E1A25A2C7DF0063C383 /* SimplePing.m in Sources */,
 				E4443E1525A2C58A0063C383 /* HDPingTools.swift in Sources */,
