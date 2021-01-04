@@ -25,7 +25,7 @@ public struct HDPingResponse {
 open class HDPingTools: NSObject {
 
     public var timeOut: TimeInterval = 10  //超时时间，毫秒
-    private(set) var isPing = false
+    public private(set) var isPing = false
 
     private var pinger: SimplePing
     private var complete: PingComplete?
