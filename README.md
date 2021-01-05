@@ -13,7 +13,7 @@ This is an iOS platform for Ping tools, using swift language development. Suppor
 
 <span id = "english"></span>
 
-Although the `AFNetworking` and `alamofire` provide the function of detecting the mobile network, they only know the user's network connection mode, but do not know the user's real user experience. Although the user is connected to WiFi, the network speed is not as fast as 3G network. 
+Although the `AFNetworking` and `alamofire` provide the function of detecting the mobile network, they only know the user's network connection mode, but do not know the user's real user experience. Maybe the user is connected to WiFi, but the network speed is not as fast as 3G network. 
 
 So it encapsulates this function. You can ping the requested domain name through this project to get the return time and judge whether the user network is in the normal range.
 
@@ -55,6 +55,8 @@ pingTools.stop()
 ```
 
 `pingTools.isPing`can judge whether there is a task in progress
+
+**Note: if the website or connected router is set to prohibit Ping, an error will be reported when pinging. You need to remove the restriction before you can use it normally**
 
 <span id = "chinese"></span>
 
@@ -100,3 +102,5 @@ pingTools.stop()
 ```
 
 `pingTools.isPing`可以判断当前是否有任务在进行中
+
+**注意：网站或者连接的路由器如果设置了禁止ping，那么ping的时候会报错，需要解除该限制才可以正常使用**
