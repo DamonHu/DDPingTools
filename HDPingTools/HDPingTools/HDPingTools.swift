@@ -23,14 +23,13 @@ public struct HDPingResponse {
 
 open class HDPingTools: NSObject {
 
-    public var timeOut: TimeInterval = 100  //上次未响应的超时时间，毫秒
+    public var timeOut: TimeInterval = 100  //响应超时时间，毫秒
     public var debugLog = true              //是否开启日志输出
-
     public private(set) var isPing = false
 
     private var pinger: SimplePing
     private var complete: PingComplete?
-    private var sendStartTime: Date?
+    private var lastSendTime: Date?
     private var sendTimer: Timer?
     private var sendInterval: TimeInterval = 0
     private var pingAddressIP = ""
@@ -64,14 +63,14 @@ open class HDPingTools: NSObject {
         self.isPing = false
         sendTimer?.invalidate()
         sendTimer = nil
-        sendStartTime = nil
+        lastSendTime = nil
     }
 }
 
 private extension HDPingTools {
     func sendPingData() {
-        if let sendStartTime = sendStartTime {
-            let time = Date().timeIntervalSince(sendStartTime).truncatingRemainder(dividingBy: 1) * 1000
+        if let lastSendTime = lastSendTime {
+            let time = Date().timeIntervalSince(lastSendTime).truncatingRemainder(dividingBy: 1) * 1000
             if time > self.timeOut,  let complete = self.complete {
                 complete(nil, HDPingError.timeOut)
             }
@@ -151,26 +150,26 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)")
         }
-        sendStartTime = Date()
+        lastSendTime = Date()
     }
 
     public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
         if debugLog {
             print("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError))
         }
-        sendStartTime = nil
+        lastSendTime = nil
         if let complete = self.complete {
             complete(nil, HDPingError.receiveError)
         }
     }
 
     public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
-        if let sendTime = sendStartTime {
+        if let sendTime = lastSendTime {
             let time = Date().timeIntervalSince(sendTime).truncatingRemainder(dividingBy: 1) * 1000
             if debugLog {
                 print("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms")
             }
-            sendStartTime = nil
+            lastSendTime = nil
             if let complete = self.complete {
                 let response = HDPingResponse(pingAddressIP: pingAddressIP, responseTime: time, responseBytes: packet.count)
                 complete(response, nil)
