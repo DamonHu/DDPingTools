@@ -7,23 +7,23 @@
 ![](./screenshot.png)
 
 
-## pod安装
-
-```
-pod 'HDPingTools'
-```
-
 ## introduce
 
 <span id = "english"></span>
 
-Although the 'AF networking' and 'alamofire' provide the function of detecting the mobile network, they only know the user's network connection mode, but do not know the user's real user experience. Although the user is connected to WiFi, the network speed is not as fast as 3G network. Therefore, as long as it is not a disconnection condition, the real network speed when a user initiates a request is more important.
+Although the `AFNetworking` and `alamofire` provide the function of detecting the mobile network, they only know the user's network connection mode, but do not know the user's real user experience. Although the user is connected to WiFi, the network speed is not as fast as 3G network. 
 
 So it encapsulates this function. You can ping the requested domain name through this project to get the return time and judge whether the user network is in the normal range.
 
 The package is based on Apple's [SimplePing](https://developer.apple.com/library/archive/samplecode/SimplePing/Introduction/Intro.html#//apple_ref/doc/uid/DTS10000716) and optimized again, which makes it easier to use and can be called in three steps
+
+## CocoaPods
+
+```
+pod 'HDPingTools'
+```
  
-### 1. Create a ping object with the hostname as the user-defined domain name
+### 1. Create a ping object with a hostname
 
 ```
 let pingTools = HDPingTools(hostName: "www.apple.com")
@@ -63,6 +63,12 @@ pingTools.stop()
 所以就封装了这个功能，可以通过该项目去`ping`一下请求的域名，以便得到返回的时间，去判断用户网络是否在正常范围。
 
 该功能是基于苹果封装的[SimplePing](https://developer.apple.com/library/archive/samplecode/SimplePing/Introduction/Intro.html#//apple_ref/doc/uid/DTS10000716)再次进行封装优化，使用更加简单，三步即可调用
+
+## 通过CocoaPods安装
+
+```
+pod 'HDPingTools'
+```
 
 ### 1、创建ping对象，hostName为自定义的域名
 
