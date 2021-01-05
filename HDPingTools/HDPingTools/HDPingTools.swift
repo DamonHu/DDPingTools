@@ -11,9 +11,8 @@ public typealias PingComplete = ((_ response: HDPingResponse?, _ error: Error?) 
 
 public enum HDPingError: Error, Equatable {
     case requestError   //发起失败
-    case receiveError  //响应失败
-    case receiveUnexpectedPacket
-    case timeOut
+    case receiveError   //响应失败
+    case timeOut        //超时
 }
 
 public struct HDPingResponse {
@@ -25,6 +24,8 @@ public struct HDPingResponse {
 open class HDPingTools: NSObject {
 
     public var timeOut: TimeInterval = 100  //上次未响应的超时时间，毫秒
+    public var debugLog = true              //是否开启日志输出
+
     public private(set) var isPing = false
 
     private var pinger: SimplePing
@@ -40,6 +41,9 @@ open class HDPingTools: NSObject {
         pinger.delegate = self
     }
 
+    public convenience init(url: URL) {
+        self.init(hostName: url.host ?? "www.apple.com")
+    }
 
     /// 开始ping请求
     /// - Parameters:
@@ -120,7 +124,9 @@ private extension HDPingTools {
 extension HDPingTools: SimplePingDelegate {
     public func simplePing(_ pinger: SimplePing, didStartWithAddress address: Data) {
         pingAddressIP = self.displayAddressForAddress(address: NSData(data: address))
-        print("ping: ", pingAddressIP)
+        if debugLog {
+            print("ping: ", pingAddressIP)
+        }
         self.sendPingData()
         if sendInterval > 0 && sendTimer == nil {
             sendTimer = Timer(timeInterval: sendInterval, repeats: true, block: { [weak self] (_) in
@@ -132,7 +138,9 @@ extension HDPingTools: SimplePingDelegate {
     }
 
     public func simplePing(_ pinger: SimplePing, didFailWithError error: Error) {
-        print("ping failed: ", self.shortErrorFromError(error: error as NSError))
+        if debugLog {
+            print("ping failed: ", self.shortErrorFromError(error: error as NSError))
+        }
         if let complete = self.complete {
             complete(nil, HDPingError.requestError)
         }
@@ -140,12 +148,16 @@ extension HDPingTools: SimplePingDelegate {
     }
 
     public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
-        print("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)")
+        if debugLog {
+            print("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)")
+        }
         sendStartTime = Date()
     }
 
     public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
-        print("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError))
+        if debugLog {
+            print("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError))
+        }
         sendStartTime = nil
         if let complete = self.complete {
             complete(nil, HDPingError.receiveError)
@@ -155,7 +167,9 @@ extension HDPingTools: SimplePingDelegate {
     public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
         if let sendTime = sendStartTime {
             let time = Date().timeIntervalSince(sendTime).truncatingRemainder(dividingBy: 1) * 1000
-            print("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms")
+            if debugLog {
+                print("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms")
+            }
             sendStartTime = nil
             if let complete = self.complete {
                 let response = HDPingResponse(pingAddressIP: pingAddressIP, responseTime: time, responseBytes: packet.count)
@@ -165,10 +179,8 @@ extension HDPingTools: SimplePingDelegate {
     }
 
     public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
-        print("unexpected packet, size=\(packet.count)")
-        sendStartTime = nil
-        if let complete = self.complete {
-            complete(nil, HDPingError.receiveUnexpectedPacket)
+        if debugLog {
+            print("unexpected receive packet, size=\(packet.count)")
         }
     }
 }
