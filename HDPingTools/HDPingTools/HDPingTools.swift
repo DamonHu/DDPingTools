@@ -31,6 +31,7 @@ open class HDPingTools: NSObject {
     private var complete: PingComplete?
     private var lastSendTime: Date?
     private var sendTimer: Timer?
+    private var checkTimer: Timer?
     private var sendInterval: TimeInterval = 0
     private var pingAddressIP = ""
 
@@ -68,6 +69,11 @@ open class HDPingTools: NSObject {
 }
 
 private extension HDPingTools {
+    //TODO: 清空状态，准备下次请求
+    func clearPingStatus() {
+
+    }
+
     func sendPingData() {
         if let lastSendTime = lastSendTime {
             let time = Date().timeIntervalSince(lastSendTime).truncatingRemainder(dividingBy: 1) * 1000

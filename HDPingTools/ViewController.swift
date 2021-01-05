@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         if pingTools.isPing {
             pingTools.stop()
         } else {
-            pingTools.start(pingType: .any, interval: 0) { (response, error) in
+            pingTools.start(pingType: .any, interval: 2) { (response, error) in
                 print(response?.pingAddressIP ?? "")
             }
         }
