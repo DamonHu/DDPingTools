@@ -1,10 +1,12 @@
 # HDPingTools
- 
-### [中文文档](#chinese)
 
-### [Document for English](#english)
+This is an iOS platform for Ping tools, using swift language development. Support the use of cocoapods integration. It can be used in three steps
 
-![](./screenshot.png)
+这是一个ios平台用来ping的工具，使用swift语言开发。支持使用cocoapods集成。三步即可使用
+
+### [Document for English](#english) | [中文文档](#chinese)
+
+![the ScreenShot 日志截图预览](./screenshot.png)
 
 
 ## introduce
