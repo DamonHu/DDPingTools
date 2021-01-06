@@ -35,7 +35,7 @@ let pingTools = HDPingTools(hostName: "www.apple.com")
 
 
 ```
-pingTools.start(pingType: .any, interval: 1) { (response, error) in
+pingTools.start(pingType: .any, interval: .second(10)) { (response, error) in
       print(response?.pingAddressIP ?? "")
  }
 ```
@@ -91,7 +91,7 @@ let pingTools = HDPingTools(hostName: "www.apple.com")
 ### 2、发起ping
 
 ```
-pingTools.start(pingType: .any, interval: 1) { (response, error) in
+pingTools.start(pingType: .any, interval: .second(10)) { (response, error) in
       print(response?.pingAddressIP ?? "")
  }
 ```
