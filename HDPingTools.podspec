@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 s.name = 'HDPingTools'
 s.swift_version = '5.0'
-s.version = '1.0.2'
+s.version = '1.1.0'
 s.license= { :type => "MIT", :file => "LICENSE" }
 s.summary = "iOS Ping tool, based on Apple's simplePing project"
 s.homepage = 'https://github.com/DamonHu/HDPingTools'
