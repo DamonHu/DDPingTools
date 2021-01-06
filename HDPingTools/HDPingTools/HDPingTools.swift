@@ -12,27 +12,50 @@ public typealias PingComplete = ((_ response: HDPingResponse?, _ error: Error?) 
 public enum HDPingError: Error, Equatable {
     case requestError   //发起失败
     case receiveError   //响应失败
-    case timeOut        //超时
+    case timeout        //超时
 }
 
 public struct HDPingResponse {
     public var pingAddressIP = ""
-    public var responseTime: TimeInterval = 0
+    public var responseTime: HDPingTimeInterval = .second(0)
     public var responseBytes: Int = 0
+}
+
+public enum HDPingTimeInterval {
+    case second(_ interval: TimeInterval)       //秒
+    case millisecond(_ interval: TimeInterval)  //毫秒
+    case microsecond(_ interval: TimeInterval)  //微秒
+
+    public var second: TimeInterval {
+        switch self {
+            case .second(let interval):
+                return interval
+            case .millisecond(let interval):
+                return interval / 1000.0
+            case .microsecond(let interval):
+                return interval / 1000000.0
+        }
+    }
+}
+
+struct HDPingItem {
+    var sendTime = Date()
+    var sequence: UInt16 = 0
 }
 
 open class HDPingTools: NSObject {
 
-    public var timeOut: TimeInterval = 100  //响应超时时间，毫秒
-    public var debugLog = true              //是否开启日志输出
+    public var timeout: HDPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
+    public var debugLog = true                                  //是否开启日志输出
+    public var stopWhenError = false                            //遇到错误停止ping
     public private(set) var isPing = false
 
     private var pinger: SimplePing
     private var complete: PingComplete?
-    private var lastSendTime: Date?
+    private var lastSendItem: HDPingItem?
+    private var lastReciveItem: HDPingItem?
     private var sendTimer: Timer?
     private var checkTimer: Timer?
-    private var sendInterval: TimeInterval = 0
     private var pingAddressIP = ""
 
     public init(hostName: String) {
@@ -50,39 +73,39 @@ open class HDPingTools: NSObject {
     ///   - pingType: ping的类型
     ///   - interval: 是否重复定时ping
     ///   - complete: 请求的回调
-    public func start(pingType: SimplePingAddressStyle = .any, interval: TimeInterval = 0, complete: PingComplete? = nil) {
+    public func start(pingType: SimplePingAddressStyle = .any, interval: HDPingTimeInterval = .second(0), complete: PingComplete? = nil) {
         self.stop()
         self.complete = complete
         self.pinger.addressStyle = pingType
-        self.sendInterval = interval
         self.pinger.start()
-        self.isPing = true
+
+        if interval.second > 0 {
+            sendTimer = Timer(timeInterval: interval.second, repeats: true, block: { [weak self] (_) in
+                guard let self = self else { return }
+                self.sendPingData()
+            })
+        }
     }
 
     public func stop() {
         self.pinger.stop()
         self.isPing = false
+        lastSendItem = nil
+        lastReciveItem = nil
+        pingAddressIP = ""
+        
         sendTimer?.invalidate()
         sendTimer = nil
-        lastSendTime = nil
+
+        checkTimer?.invalidate()
+        checkTimer = nil
     }
 }
 
 private extension HDPingTools {
-    //TODO: 清空状态，准备下次请求
-    func clearPingStatus() {
-
-    }
-
     func sendPingData() {
-        if let lastSendTime = lastSendTime {
-            let time = Date().timeIntervalSince(lastSendTime).truncatingRemainder(dividingBy: 1) * 1000
-            if time > self.timeOut,  let complete = self.complete {
-                complete(nil, HDPingError.timeOut)
-            }
-        } else {
-            pinger.send(with: nil)
-        }
+        guard !self.isPing else { return }
+        pinger.send(with: nil)
     }
 
     func displayAddressForAddress(address: NSData) -> String {
@@ -132,13 +155,11 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping: ", pingAddressIP)
         }
+        //发送第一次ping
         self.sendPingData()
-        if sendInterval > 0 && sendTimer == nil {
-            sendTimer = Timer(timeInterval: sendInterval, repeats: true, block: { [weak self] (_) in
-                guard let self = self else { return }
-                self.sendPingData()
-            })
-            RunLoop.main.add(sendTimer!, forMode: .common)
+        if let sendTimer = sendTimer {
+            //循环发送
+            RunLoop.main.add(sendTimer, forMode: .common)
         }
     }
 
@@ -146,38 +167,65 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping failed: ", self.shortErrorFromError(error: error as NSError))
         }
+        self.isPing = false
         if let complete = self.complete {
             complete(nil, HDPingError.requestError)
         }
-        self.stop()
+        if stopWhenError {
+            self.stop()
+        }
     }
 
     public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
         if debugLog {
             print("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)")
         }
-        lastSendTime = Date()
+        self.isPing = true
+        lastSendItem = HDPingItem(sendTime: Date(), sequence: sequenceNumber)
+        if timeout.second > 0 {
+            checkTimer?.invalidate()
+            checkTimer = nil
+            checkTimer = Timer(timeInterval: timeout.second, repeats: false, block: { [weak self] (_) in
+                guard let self = self else { return }
+                if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {
+                    //超时
+                    if let complete = self.complete {
+                        complete(nil, HDPingError.timeout)
+                    }
+                    if self.stopWhenError {
+                        self.stop()
+                    }
+                }
+            })
+            RunLoop.main.add(checkTimer!, forMode: .common)
+        }
+
     }
 
     public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
         if debugLog {
             print("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError))
         }
-        lastSendTime = nil
+        lastSendItem = nil
+        self.isPing = false
         if let complete = self.complete {
             complete(nil, HDPingError.receiveError)
+        }
+        if self.stopWhenError {
+            self.stop()
         }
     }
 
     public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
-        if let sendTime = lastSendTime {
-            let time = Date().timeIntervalSince(sendTime).truncatingRemainder(dividingBy: 1) * 1000
+        if let sendPingItem = lastSendItem {
+            let time = Date().timeIntervalSince(sendPingItem.sendTime).truncatingRemainder(dividingBy: 1) * 1000
             if debugLog {
                 print("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms")
             }
-            lastSendTime = nil
+            self.isPing = false
+            lastReciveItem = HDPingItem(sendTime: Date(), sequence: sequenceNumber)
             if let complete = self.complete {
-                let response = HDPingResponse(pingAddressIP: pingAddressIP, responseTime: time, responseBytes: packet.count)
+                let response = HDPingResponse(pingAddressIP: pingAddressIP, responseTime: .millisecond(time), responseBytes: packet.count)
                 complete(response, nil)
             }
         }

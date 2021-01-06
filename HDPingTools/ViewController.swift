@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     let pingTools = HDPingTools(hostName: "www.apple.com")
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -25,8 +26,10 @@ class ViewController: UIViewController {
         if pingTools.isPing {
             pingTools.stop()
         } else {
-            pingTools.start(pingType: .any, interval: 2) { (response, error) in
-                print(response?.pingAddressIP ?? "")
+            pingTools.start(pingType: .any, interval: .second(2)) { (response, error) in
+                if let error = error {
+                    print(error)
+                }
             }
         }
     }

@@ -54,7 +54,15 @@ The `response` of the response contains the following contents
 pingTools.stop()
 ```
 
-`pingTools.isPing`can judge whether there is a task in progress
+### 4、Optional configuration
+
+```
+public var timeout: HDPingTimeInterval = .millisecond(1000)  //user defined timeout. The default value is 1000 ms. if it is set to 0, it will wait all the time
+public var debugLog = true                                  //enable log output
+public var stopWhenError = false                            //stop Ping when an error is encountered
+public private(set) var isPing = false				//you can judge whether there is a ping task in progress
+```
+
 
 **Note: if the website or connected router is set to prohibit Ping, an error will be reported when pinging. You need to remove the restriction before you can use it normally**
 
@@ -101,6 +109,13 @@ pingTools.start(pingType: .any, interval: 1) { (response, error) in
 pingTools.stop()
 ```
 
-`pingTools.isPing`可以判断当前是否有任务在进行中
+### 4、可选配置
+
+```
+public var timeout: HDPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
+public var debugLog = true                                  //是否开启日志输出
+public var stopWhenError = false                            //遇到错误停止ping
+public private(set) var isPing = false				//可以判断当前是否有ping任务在进行中
+```
 
 **注意：网站或者连接的路由器如果设置了禁止ping，那么ping的时候会报错，需要解除该限制才可以正常使用**
