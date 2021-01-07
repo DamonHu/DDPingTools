@@ -189,6 +189,7 @@ extension HDPingTools: SimplePingDelegate {
                 guard let self = self else { return }
                 if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {
                     //超时
+                    self.isPing = false
                     if let complete = self.complete {
                         complete(nil, HDPingError.timeout)
                     }
