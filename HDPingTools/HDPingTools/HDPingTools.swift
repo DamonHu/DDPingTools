@@ -51,6 +51,7 @@ open class HDPingTools: NSObject {
     public private(set) var isPing = false
 
     private var pinger: SimplePing
+    private var pingInterval: HDPingTimeInterval = .second(0)
     private var complete: PingComplete?
     private var lastSendItem: HDPingItem?
     private var lastReciveItem: HDPingItem?
@@ -58,10 +59,18 @@ open class HDPingTools: NSObject {
     private var checkTimer: Timer?
     private var pingAddressIP = ""
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     public init(hostName: String) {
         pinger = SimplePing(hostName: hostName)
         super.init()
         pinger.delegate = self
+        //切到后台
+        NotificationCenter.default.addObserver(self, selector: #selector(_didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        //切到前台
+        NotificationCenter.default.addObserver(self, selector: #selector(_didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     public convenience init(url: URL) {
@@ -75,6 +84,7 @@ open class HDPingTools: NSObject {
     ///   - complete: 请求的回调
     public func start(pingType: SimplePingAddressStyle = .any, interval: HDPingTimeInterval = .second(0), complete: PingComplete? = nil) {
         self.stop()
+        self.pingInterval = interval
         self.complete = complete
         self.pinger.addressStyle = pingType
         self.pinger.start()
@@ -93,7 +103,7 @@ open class HDPingTools: NSObject {
         lastSendItem = nil
         lastReciveItem = nil
         pingAddressIP = ""
-        
+
         sendTimer?.invalidate()
         sendTimer = nil
 
@@ -103,6 +113,21 @@ open class HDPingTools: NSObject {
 }
 
 private extension HDPingTools {
+
+    @objc func _didEnterBackground() {
+        if debugLog {
+            print("didEnterBackground: stop ping")
+        }
+        self.stop()
+    }
+
+    @objc func _didBecomeActive() {
+        if debugLog {
+            print("didBecomeActive: ping resume")
+        }
+        self.start(pingType: self.pinger.addressStyle, interval: self.pingInterval, complete: self.complete)
+    }
+
     func sendPingData() {
         guard !self.isPing else { return }
         pinger.send(with: nil)
