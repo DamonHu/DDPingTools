@@ -95,6 +95,8 @@ open class HDPingTools: NSObject {
                 guard let self = self else { return }
                 self.start(pingType: pingType, interval: interval, complete: complete)
             })
+            //循环发送
+            RunLoop.main.add(sendTimer!, forMode: .common)
         }
     }
 
@@ -187,10 +189,6 @@ extension HDPingTools: SimplePingDelegate {
         }
         //发送一次ping
         self.sendPingData()
-        if let sendTimer = sendTimer {
-            //循环发送
-            RunLoop.main.add(sendTimer, forMode: .common)
-        }
     }
 
     public func simplePing(_ pinger: SimplePing, didFailWithError error: Error) {
