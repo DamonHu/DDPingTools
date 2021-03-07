@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 public typealias PingComplete = ((_ response: HDPingResponse?, _ error: Error?) -> Void)
 
@@ -63,8 +64,8 @@ open class HDPingTools: NSObject {
         NotificationCenter.default.removeObserver(self)
     }
 
-    public init(hostName: String) {
-        pinger = SimplePing(hostName: hostName)
+    public init(hostName: String? = nil) {
+        pinger = SimplePing(hostName: hostName ?? "www.apple.com")
         super.init()
         pinger.delegate = self
         //切到后台
@@ -73,8 +74,8 @@ open class HDPingTools: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(_didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
-    public convenience init(url: URL) {
-        self.init(hostName: url.host ?? "www.apple.com")
+    public convenience init(url: URL? = nil) {
+        self.init(hostName: url?.host)
     }
 
     /// 开始ping请求
@@ -92,27 +93,31 @@ open class HDPingTools: NSObject {
         if interval.second > 0 {
             sendTimer = Timer(timeInterval: interval.second, repeats: true, block: { [weak self] (_) in
                 guard let self = self else { return }
-                self.sendPingData()
+                self.start(pingType: pingType, interval: interval, complete: complete)
             })
         }
     }
 
     public func stop() {
+        self._complete()
+        //停止发送ping
+        sendTimer?.invalidate()
+        sendTimer = nil
+    }
+}
+
+private extension HDPingTools {
+    //ping完成一次之后的清理，ping成功或失败均会调用
+    func _complete() {
         self.pinger.stop()
         self.isPing = false
         lastSendItem = nil
         lastReciveItem = nil
         pingAddressIP = ""
-
-        sendTimer?.invalidate()
-        sendTimer = nil
-
+        //检测超时的timer停止
         checkTimer?.invalidate()
         checkTimer = nil
     }
-}
-
-private extension HDPingTools {
 
     @objc func _didEnterBackground() {
         if debugLog {
@@ -180,7 +185,7 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping: ", pingAddressIP)
         }
-        //发送第一次ping
+        //发送一次ping
         self.sendPingData()
         if let sendTimer = sendTimer {
             //循环发送
@@ -192,10 +197,12 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping failed: ", self.shortErrorFromError(error: error as NSError))
         }
-        self.isPing = false
         if let complete = self.complete {
             complete(nil, HDPingError.requestError)
         }
+        //标记完成
+        self._complete()
+        //停止ping
         if stopWhenError {
             self.stop()
         }
@@ -207,6 +214,7 @@ extension HDPingTools: SimplePingDelegate {
         }
         self.isPing = true
         lastSendItem = HDPingItem(sendTime: Date(), sequence: sequenceNumber)
+        //发送数据之后监测是否超时
         if timeout.second > 0 {
             checkTimer?.invalidate()
             checkTimer = nil
@@ -214,10 +222,12 @@ extension HDPingTools: SimplePingDelegate {
                 guard let self = self else { return }
                 if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {
                     //超时
-                    self.isPing = false
                     if let complete = self.complete {
                         complete(nil, HDPingError.timeout)
                     }
+                    //标记完成
+                    self._complete()
+                    //停止ping
                     if self.stopWhenError {
                         self.stop()
                     }
@@ -232,11 +242,12 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError))
         }
-        lastSendItem = nil
-        self.isPing = false
         if let complete = self.complete {
             complete(nil, HDPingError.receiveError)
         }
+        //标记完成
+        self._complete()
+        //停止ping
         if self.stopWhenError {
             self.stop()
         }
@@ -248,18 +259,25 @@ extension HDPingTools: SimplePingDelegate {
             if debugLog {
                 print("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms")
             }
-            self.isPing = false
-            lastReciveItem = HDPingItem(sendTime: Date(), sequence: sequenceNumber)
             if let complete = self.complete {
                 let response = HDPingResponse(pingAddressIP: pingAddressIP, responseTime: .millisecond(time), responseBytes: packet.count)
                 complete(response, nil)
             }
+            lastReciveItem = HDPingItem(sendTime: Date(), sequence: sequenceNumber)
+            //标记完成
+            self._complete()
         }
     }
 
     public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
         if debugLog {
             print("unexpected receive packet, size=\(packet.count)")
+        }
+        //标记完成
+        self._complete()
+        //停止ping
+        if self.stopWhenError {
+            self.stop()
         }
     }
 }
