@@ -8,7 +8,7 @@ s.homepage = 'https://github.com/DamonHu/HDPingTools'
 s.authors = { 'DamonHu' => 'dong765@qq.com' }
 s.source = { :git => "https://github.com/DamonHu/HDPingTools.git", :tag => s.version}
 s.requires_arc = true
-s.ios.deployment_target = '10.0'
+s.ios.deployment_target = '11.0'
 s.subspec 'core' do |cs|
     cs.source_files = "pod/*.{h,m,swift}"
 end
