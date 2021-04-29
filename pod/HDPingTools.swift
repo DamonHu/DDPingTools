@@ -97,7 +97,7 @@ open class HDPingTools: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(_didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
-    public convenience init(url: URL? = nil) {
+    public convenience init(url: URL?) {
         self.init(hostName: url?.host)
     }
 
