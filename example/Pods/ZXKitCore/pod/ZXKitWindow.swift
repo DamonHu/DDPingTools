@@ -91,10 +91,11 @@ extension ZXKitWindow {
     func showInput(complete: ((String)->Void)?) {
         self.inputComplete = complete
         self.mInputBGView.isHidden = false
+        self.mTextField.becomeFirstResponder()
     }
 
     func hideInput() {
-        self.mTextField.resignFirstResponder()
+        self.mTextField.endEditing(true)
         self.mInputBGView.isHidden = true
         self.mTextField.placeholder = NSLocalizedString("input text", comment: "")
         self.mTextField.text = ""
@@ -125,8 +126,14 @@ extension ZXKitWindow: UICollectionViewDelegate,UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let plugin = ZXKit.pluginList[indexPath.section][indexPath.item]
-        ZXKit.hide()
-        plugin.start()
+        if plugin.isRunning {
+            plugin.stop()
+            self.reloadData()
+        } else {
+            plugin.start()
+            self.reloadData()
+        }
+
     }
 }
 
@@ -134,6 +141,7 @@ extension ZXKitWindow: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let complete = self.inputComplete {
             complete(textField.text ?? "")
+            self.reloadData()
         }
     }
 
