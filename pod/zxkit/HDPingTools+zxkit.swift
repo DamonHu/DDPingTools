@@ -43,8 +43,8 @@ extension HDPingTools: ZXKitPluginProtocol {
     public func start() {
         self.stop()
         ZXKit.resetFloatButton()
-        ZXKit.textField?.placeholder = "baidu.com"
-        ZXKit.textField?.text = "baidu.com"
+        ZXKit.textField?.placeholder = self.hostName ?? "baidu.com"
+        ZXKit.textField?.text = self.hostName
         ZXKit.showInput { [weak self] (url) in
             guard let self = self else { return }
             self.hostName = url
