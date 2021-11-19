@@ -78,8 +78,7 @@ Register the plug-in to `ZXKit` in `AppDelegate`
 ```
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 	
-	let pingTools = HDPingTools(hostName: "www.apple.com")
-	ZXKit.regist(plugin: pingTools)
+	ZXKit.regist(plugin: HDPingTools())
 	
 	return true
 }
@@ -155,8 +154,7 @@ pod 'HDPingTools/zxkit'
 ```
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 	
-	let pingTools = HDPingTools(hostName: "www.apple.com")
-	ZXKit.regist(plugin: pingTools)
+	ZXKit.regist(plugin: HDPingTools())
 	
 	return true
 }
