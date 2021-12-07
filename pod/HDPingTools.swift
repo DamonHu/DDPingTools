@@ -48,11 +48,12 @@ struct HDPingItem {
 }
 
 open class HDPingTools: NSObject {
-
     public var timeout: HDPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
     public var debugLog = true                                  //是否开启日志输出
     public var stopWhenError = false                            //遇到错误停止ping
     public private(set) var isPing = false
+    public static var showNetworkActivityIndicator = true              //是否在状态栏显示
+
     var isPluginRunning = false
     
     public var hostName: String? {
@@ -130,7 +131,6 @@ open class HDPingTools: NSObject {
     }
 
     public func stop() {
-        self.isPluginRunning = false
         self._complete()
         //停止发送ping
         sendTimer?.invalidate()
@@ -148,6 +148,7 @@ private extension HDPingTools {
     //ping完成一次之后的清理，ping成功或失败均会调用
     func _complete() {
         self.pinger.stop()
+        self.isPluginRunning = false
         self.isPing = false
         lastSendItem = nil
         lastReciveItem = nil
@@ -231,6 +232,7 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping failed: ", self.shortErrorFromError(error: error as NSError))
         }
+        HDPingNetworkActivityIndicator.shared.update(time: 460)
         if let complete = self.complete {
             complete(nil, HDPingError.requestError)
         }
@@ -255,6 +257,7 @@ extension HDPingTools: SimplePingDelegate {
             checkTimer = Timer(timeInterval: timeout.second, repeats: false, block: { [weak self] (_) in
                 guard let self = self else { return }
                 if self.lastSendItem?.sequence != self.lastReciveItem?.sequence {
+                    HDPingNetworkActivityIndicator.shared.update(time: 460)
                     //超时
                     if let complete = self.complete {
                         complete(nil, HDPingError.timeout)
@@ -276,6 +279,7 @@ extension HDPingTools: SimplePingDelegate {
         if debugLog {
             print("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError))
         }
+        HDPingNetworkActivityIndicator.shared.update(time: 460)
         if let complete = self.complete {
             complete(nil, HDPingError.receiveError)
         }
@@ -293,6 +297,7 @@ extension HDPingTools: SimplePingDelegate {
             if debugLog {
                 print("\(packet.count) bytes from \(pingAddressIP): icmp_seq=\(sequenceNumber) time=\(time)ms")
             }
+            HDPingNetworkActivityIndicator.shared.update(time: Int(time))
             if let complete = self.complete {
                 let response = HDPingResponse(pingAddressIP: pingAddressIP, responseTime: .millisecond(time), responseBytes: packet.count)
                 complete(response, nil)
