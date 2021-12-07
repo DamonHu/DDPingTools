@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		482A3AA644B426F05081AFB0 /* Pods_HDPingTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA99E5D7622023685FF964CF /* Pods_HDPingTools.framework */; };
 		E4443DFD25A2C0DC0063C383 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4443DFC25A2C0DC0063C383 /* AppDelegate.swift */; };
-		E4443DFF25A2C0DC0063C383 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4443DFE25A2C0DC0063C383 /* SceneDelegate.swift */; };
 		E4443E0125A2C0DC0063C383 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4443E0025A2C0DC0063C383 /* ViewController.swift */; };
 		E4443E0425A2C0DC0063C383 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4443E0225A2C0DC0063C383 /* Main.storyboard */; };
 		E4443E0625A2C0E00063C383 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4443E0525A2C0E00063C383 /* Assets.xcassets */; };
@@ -27,7 +26,6 @@
 		CFCAFBE4F82A6C4CA83EBAD0 /* Pods-HDPingTools.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HDPingTools.debug.xcconfig"; path = "Target Support Files/Pods-HDPingTools/Pods-HDPingTools.debug.xcconfig"; sourceTree = "<group>"; };
 		E4443DF925A2C0DC0063C383 /* HDPingTools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HDPingTools.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4443DFC25A2C0DC0063C383 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E4443DFE25A2C0DC0063C383 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E4443E0025A2C0DC0063C383 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E4443E0325A2C0DC0063C383 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E4443E0525A2C0E00063C383 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,7 +94,6 @@
 				E4AC967B263A6442001FC322 /* pod */,
 				E4443E1725A2C7DE0063C383 /* HDPingTools-Bridging-Header.h */,
 				E4443DFC25A2C0DC0063C383 /* AppDelegate.swift */,
-				E4443DFE25A2C0DC0063C383 /* SceneDelegate.swift */,
 				E4443E0025A2C0DC0063C383 /* ViewController.swift */,
 				E4443E0225A2C0DC0063C383 /* Main.storyboard */,
 				E4443E0525A2C0E00063C383 /* Assets.xcassets */,
@@ -264,7 +261,6 @@
 				E4443E0125A2C0DC0063C383 /* ViewController.swift in Sources */,
 				E4443DFD25A2C0DC0063C383 /* AppDelegate.swift in Sources */,
 				E4AC968E263A7E2F001FC322 /* HDPingTools+zxkit.swift in Sources */,
-				E4443DFF25A2C0DC0063C383 /* SceneDelegate.swift in Sources */,
 				E45A4A70275F138A004F3271 /* HDPingNetworkActivityIndicator.swift in Sources */,
 				E4AC9681263A6442001FC322 /* SimplePing.m in Sources */,
 				E4AC9680263A6442001FC322 /* HDPingTools.swift in Sources */,
@@ -420,7 +416,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 86XZ7694Z7;
 				INFOPLIST_FILE = HDPingTools/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -446,7 +442,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 86XZ7694Z7;
 				INFOPLIST_FILE = HDPingTools/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -62,7 +62,7 @@ private extension HDPingNetworkActivityIndicator {
         }
         if self.statusBarStyle == .lightContent {
             self.mLabel.textColor = .lightText
-        } else if self.statusBarStyle == .darkContent {
+        } else {
             self.mLabel.textColor = .darkText
         }
 
