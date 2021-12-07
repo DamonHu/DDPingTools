@@ -16,7 +16,7 @@ enum Section: CaseIterable {
 ///log的内容
 public class ZXKitLoggerItem {
     let identifier = UUID()                                 //用于hash计算
-    public var mLogItemType = ZXKitLogType.normal             //log类型
+    public var mLogItemType = ZXKitLogType.info             //log类型
     public var mLogDebugContent: String = ""              //log输出的文件、行数、函数名
     public var mLogContent: Any?                         //log的内容
     public var mCreateDate = Date()                      //log日期
@@ -29,7 +29,7 @@ public class ZXKitLoggerItem {
     public func getFullContentString() -> String {
         //日期
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm:ss.SSS"
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         let dateStr = dateFormatter.string(from: mCreateDate)
         //内容
         var contentString = ""
@@ -40,41 +40,35 @@ public class ZXKitLoggerItem {
                 contentString = "\(mContent)"
             }
             if self.mLogItemType == .privacy {
-                if ZXKitLogger.privacyLogPassword.isEmpty {
-                    contentString = NSLocalizedString("Password is not set", comment: "") + ":" +  contentString
-                } else if ZXKitLogger.privacyLogPassword.count != kCCKeySizeAES256 {
-                    contentString = NSLocalizedString("The password requires 32 characters", comment: "") + contentString
-                } else if !ZXKitLogger.shared.isPasswordCorrect {
-                    contentString = contentString.zx.aes256Encrypt(password: ZXKitLogger.privacyLogPassword)
-                }
+                contentString = contentString.zx.aesCBCEncrypt(password: ZXKitLogger.privacyLogPassword, ivString: ZXKitLogger.privacyLogIv, encodeType: ZXKitLogger.privacyResultEncodeType) ?? "Invalid encryption".ZXLocaleString
             }
         }
         
         if ZXKitLogger.isFullLogOut {
             switch mLogItemType {
-                case .normal:
-                    return dateStr + "  >   ✅✅" +  mLogDebugContent + "\n" + contentString + "\n"
+                case .info:
+                    return dateStr + " ---- ✅✅ ---- " +  mLogDebugContent + "\n" + contentString + "\n"
                 case .warn:
-                    return dateStr + "  >   ⚠️⚠️" +  mLogDebugContent + "\n" + contentString + "\n"
+                    return dateStr + " ---- ⚠️⚠️ ---- " +  mLogDebugContent + "\n" + contentString + "\n"
                 case .error:
-                    return dateStr + "  >   ❌❌" +  mLogDebugContent + "\n" + contentString + "\n"
+                    return dateStr + " ---- ❌❌ ---- " +  mLogDebugContent + "\n" + contentString + "\n"
                 case .privacy:
-                    return dateStr + "  >   ⛔️⛔️" +  mLogDebugContent + "\n" + contentString + "\n"
-                case .debug:
-                    return dateStr + "  >   🖤🖤" +  mLogDebugContent + "\n" + contentString + "\n"
+                    return dateStr + " ---- ⛔️⛔️ ---- " +  mLogDebugContent + "\n" + contentString + "\n"
+                default:
+                    return dateStr + " ---- 💜💜 ---- " +  mLogDebugContent + "\n" + contentString + "\n"
             }
         } else {
             switch mLogItemType {
-                case .normal:
-                    return dateStr + "  >   ✅✅" + contentString + "\n"
+                case .info:
+                    return dateStr + " ---- ✅✅ ---- " + "\n" + contentString + "\n"
                 case .warn:
-                    return dateStr + "  >   ⚠️⚠️" + contentString + "\n"
+                    return dateStr + " ---- ⚠️⚠️ ---- " + "\n" + contentString + "\n"
                 case .error:
-                    return dateStr + "  >   ❌❌" + contentString + "\n"
+                    return dateStr + " ---- ❌❌ ---- " + "\n" + contentString + "\n"
                 case .privacy:
-                    return dateStr + "  >   ⛔️⛔️" + contentString + "\n"
-                case .debug:
-                    return dateStr + "  >   🖤🖤" + contentString + "\n"
+                    return dateStr + " ---- ⛔️⛔️ ---- " + "\n" + contentString + "\n"
+                default:
+                    return dateStr + " ---- 💜💜 ---- " + "\n" + contentString + "\n"
             }
         }
     }

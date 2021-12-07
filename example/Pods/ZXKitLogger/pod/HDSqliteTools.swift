@@ -26,8 +26,8 @@ class HDSqliteTools {
     
     //获取数据库文件夹
     func getDBFolder() -> URL {
-        let dbFolder = ZXKitLogger.userID.zx.encryptString(encryType: .md5)
-        let path = ZXKitUtil.shared.createFileDirectory(in: .caches, directoryName: dbFolder)
+        let dbFolder = ZXKitLogger.userID.zx.encryptString(encryType: .md5) ?? "ZXKitLog"
+        let path = ZXKitUtil.shared.createFileDirectory(in: .documents, directoryName: dbFolder)
         return path
     }
 
@@ -86,7 +86,7 @@ private extension HDSqliteTools {
     func _getDataBasePath(name: String? = nil) -> URL {
         let path = self.getDBFolder()
         if let name = name {
-            return path.appendingPathComponent("\(name)")
+            return path.appendingPathComponent(name)
         } else {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"

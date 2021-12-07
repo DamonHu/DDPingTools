@@ -44,10 +44,10 @@ extension HDPingTools: ZXKitPluginProtocol {
             ZXKitLogger.show()
             self.start(pingType: .any, interval: .second(10)) { (response, error) in
                 if let error = error {
-                    ZXErrorLog(error.localizedDescription)
+                    printError(error.localizedDescription)
                 } else if let response = response {
                     let time = Int(response.responseTime.second * 1000)
-                    ZXNormalLog("ping: \(response.pingAddressIP) sent \(response.responseBytes) data bytes, response:  \(time)ms")
+                    printInfo("ping: \(response.pingAddressIP) sent \(response.responseBytes) data bytes, response:  \(time)ms")
                     ZXKit.floatButton?.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
                     ZXKit.floatButton?.setTitle("\(time)ms", for: .normal)
                     if time >= 100 {
