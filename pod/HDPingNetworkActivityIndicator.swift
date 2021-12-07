@@ -35,6 +35,7 @@ class HDPingNetworkActivityIndicator {
     lazy var mLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -64,16 +65,14 @@ private extension HDPingNetworkActivityIndicator {
         } else if self.statusBarStyle == .darkContent {
             self.mLabel.textColor = .darkText
         }
-        print(mIndicatorWindow.frame.size.height)
+
         self.mIndicatorWindow.addSubview(mLabel)
-        mLabel.snp.makeConstraints { make in
-            if mIndicatorWindow.frame.size.height > 30 {
-                make.right.equalToSuperview().offset(-40)
-                make.top.equalToSuperview()
-            } else {
-                make.centerX.equalToSuperview().offset(self.mIndicatorWindow.frame.size.width/4)
-                make.centerY.equalToSuperview()
-            }
+        if mIndicatorWindow.frame.size.height > 30 {
+            mLabel.rightAnchor.constraint(equalTo: self.mIndicatorWindow.rightAnchor, constant: -40).isActive = true
+            mLabel.topAnchor.constraint(equalTo: self.mIndicatorWindow.topAnchor).isActive = true
+        } else {
+            mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.centerXAnchor, constant: self.mIndicatorWindow.frame.size.width/4).isActive = true
+            mLabel.centerYAnchor.constraint(equalTo: self.mIndicatorWindow.centerYAnchor).isActive = true
         }
     }
 }
