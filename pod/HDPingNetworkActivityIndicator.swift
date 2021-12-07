@@ -74,7 +74,6 @@ private extension HDPingNetworkActivityIndicator {
                 make.centerX.equalToSuperview().offset(self.mIndicatorWindow.frame.size.width/4)
                 make.centerY.equalToSuperview()
             }
-
         }
     }
 }
