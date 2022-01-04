@@ -21,7 +21,6 @@ class HDPingNetworkActivityIndicator {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self._createUI()
             self.isHidden = false
-            self.mIndicatorWindow.makeKeyAndVisible()
         }
     }
 
@@ -34,7 +33,6 @@ class HDPingNetworkActivityIndicator {
     //MARK: UI
     lazy var mLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -68,9 +66,11 @@ private extension HDPingNetworkActivityIndicator {
 
         self.mIndicatorWindow.addSubview(mLabel)
         if mIndicatorWindow.frame.size.height > 30 {
+            mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
             mLabel.rightAnchor.constraint(equalTo: self.mIndicatorWindow.rightAnchor, constant: -40).isActive = true
             mLabel.topAnchor.constraint(equalTo: self.mIndicatorWindow.topAnchor).isActive = true
         } else {
+            mLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
             mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.centerXAnchor, constant: self.mIndicatorWindow.frame.size.width/4).isActive = true
             mLabel.centerYAnchor.constraint(equalTo: self.mIndicatorWindow.centerYAnchor).isActive = true
         }
