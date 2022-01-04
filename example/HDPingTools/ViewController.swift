@@ -13,7 +13,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.backgroundColor = UIColor.white
 
         let button = UIButton(type: .custom)
         button.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
@@ -27,15 +27,15 @@ class ViewController: UIViewController {
 //        if pingTools.isPing {
 //            pingTools.stop()
 //        } else {
-//            pingTools.start(pingType: .any, interval: .second(2)) { (response, error) in
-//                if let error = error {
-//                    print(error)
-//                }
-//            }
+            pingTools.start(pingType: .any, interval: .second(2)) { (response, error) in
+                if let error = error {
+                    print(error)
+                }
+            }
 //        }
 
-        ZXKit.regist(plugin: pingTools)
-        ZXKit.show()
+//        ZXKit.regist(plugin: pingTools)
+//        ZXKit.show()
     }
 
     

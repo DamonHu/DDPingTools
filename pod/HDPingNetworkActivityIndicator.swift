@@ -67,7 +67,7 @@ private extension HDPingNetworkActivityIndicator {
         self.mIndicatorWindow.addSubview(mLabel)
         if mIndicatorWindow.frame.size.height > 30 {
             mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            mLabel.rightAnchor.constraint(equalTo: self.mIndicatorWindow.rightAnchor, constant: -40).isActive = true
+            mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.rightAnchor, constant: -56).isActive = true
             mLabel.topAnchor.constraint(equalTo: self.mIndicatorWindow.topAnchor).isActive = true
         } else {
             mLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
