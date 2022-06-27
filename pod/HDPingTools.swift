@@ -97,10 +97,6 @@ open class HDPingTools: NSObject {
         pinger = SimplePing(hostName: host)
         super.init()
         pinger.delegate = self
-        //切到后台
-        NotificationCenter.default.addObserver(self, selector: #selector(_didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        //切到前台
-        NotificationCenter.default.addObserver(self, selector: #selector(_didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     public convenience init(url: URL?) {
@@ -114,6 +110,11 @@ open class HDPingTools: NSObject {
     ///   - complete: 请求的回调
     public func start(pingType: SimplePingAddressStyle = .any, interval: HDPingTimeInterval = .second(0), complete: PingComplete? = nil) {
         self.stop()
+        //切到后台
+        NotificationCenter.default.addObserver(self, selector: #selector(_didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        //切到前台
+        NotificationCenter.default.addObserver(self, selector: #selector(_didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        //
         self.pingInterval = interval
         self.complete = complete
         self.pinger.addressStyle = pingType
@@ -135,7 +136,10 @@ open class HDPingTools: NSObject {
         //停止发送ping
         sendTimer?.invalidate()
         sendTimer = nil
-        
+
+        //移除消息订阅
+        NotificationCenter.default.removeObserver(self)
+
         #if canImport(ZXKitCore)
         ZXKit.resetFloatButton()
         ZXKit.textField?.placeholder = self.hostName ?? "www.apple.com"
