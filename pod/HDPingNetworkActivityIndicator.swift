@@ -25,7 +25,6 @@ class HDPingNetworkActivityIndicator {
     }
 
     func update(time: Int) {
-        self.mLabel.isHidden = !HDPingTools.showNetworkActivityIndicator
         self.mLabel.text = "\(time)ms"
     }
 
