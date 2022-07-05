@@ -6,8 +6,9 @@ This is an iOS platform for Ping tools, using swift language development. Suppor
 
 ### [Document for English](#english) | [中文文档](#chinese)
 
-![the ScreenShot 日志截图预览](./screenshot.png)
-
+| log | iPhone X状态栏 statusBar |  状态栏 statusBar |
+|----|----|----|
+|![the ScreenShot 日志截图预览](./screenshot.png)|![the ScreenShot 状态栏](./screenshot1.jpg)|![the ScreenShot 状态栏](./screenshot2.jpg)
 
 ## introduce
 
