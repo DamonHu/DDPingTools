@@ -13,14 +13,15 @@ class HDPingNetworkActivityIndicator {
 
     var isHidden = false {
         willSet {
-            self.mIndicatorWindow.isHidden = newValue
+            DispatchQueue.main.async {
+                self.mIndicatorWindow.isHidden = newValue
+            }
         }
     }
 
     private init(){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.async {
             self._createUI()
-            self.isHidden = false
         }
     }
 

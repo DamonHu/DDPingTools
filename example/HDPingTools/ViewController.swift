@@ -16,11 +16,19 @@ class ViewController: UIViewController {
         self.view.backgroundColor = UIColor.white
 
         let button = UIButton(type: .custom)
-        button.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
+        button.setTitle("开始", for: .normal)
+        button.frame = CGRect(x: 100, y: 100, width: 100, height: 40)
         button.backgroundColor = UIColor.red
         self.view.addSubview(button)
         button.addTarget(self, action: #selector(start), for: .touchUpInside)
 
+
+        let button2 = UIButton(type: .custom)
+        button2.setTitle("结束", for: .normal)
+        button2.frame = CGRect(x: 100, y: 200, width: 100, height: 40)
+        button2.backgroundColor = UIColor.red
+        self.view.addSubview(button2)
+        button2.addTarget(self, action: #selector(stop), for: .touchUpInside)
     }
 
     @objc func start() {
@@ -38,6 +46,9 @@ class ViewController: UIViewController {
 //        ZXKit.show()
     }
 
+    @objc func stop() {
+        pingTools.stop()
+    }
     
 }
 
