@@ -26,9 +26,9 @@ public struct HDPingResponse {
 }
 
 public enum NetworkActivityIndicatorStatus {
-    case auto
-    case always
-    case none
+    case auto       //自动显示
+    case always     //一直显示
+    case none       //不显示
 }
 
 public enum HDPingTimeInterval {

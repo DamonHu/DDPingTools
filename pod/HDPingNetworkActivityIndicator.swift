@@ -59,9 +59,9 @@ private extension HDPingNetworkActivityIndicator {
             self.statusBarStyle = UIApplication.shared.statusBarStyle
         }
         if self.statusBarStyle == .lightContent {
-            self.mLabel.textColor = .lightText
+            self.mLabel.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         } else {
-            self.mLabel.textColor = .darkText
+            self.mLabel.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.85)
         }
 
         self.mIndicatorWindow.addSubview(mLabel)
@@ -70,7 +70,7 @@ private extension HDPingNetworkActivityIndicator {
             mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.rightAnchor, constant: -56).isActive = true
             mLabel.topAnchor.constraint(equalTo: self.mIndicatorWindow.topAnchor).isActive = true
         } else {
-            mLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
             mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.centerXAnchor, constant: self.mIndicatorWindow.frame.size.width/4).isActive = true
             mLabel.centerYAnchor.constraint(equalTo: self.mIndicatorWindow.centerYAnchor).isActive = true
         }
