@@ -57,10 +57,9 @@ open class HDPingTools: NSObject {
     public var timeout: HDPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
     public var debugLog = true                                  //是否开启日志输出
     public var stopWhenError = false                            //遇到错误停止ping
-    public private(set) var isPing = false
+    public private(set) var isPing = false                      //是否正在ping中
+    public var isRunning: Bool = false                          //是否在运行，包括定时状态
     public var showNetworkActivityIndicator: NetworkActivityIndicatorStatus = .auto              //是否在状态栏显示
-
-    var isPluginRunning = false
     
     public var hostName: String? {
         get {
@@ -153,7 +152,7 @@ private extension HDPingTools {
         self.complete = complete
         self.pinger.addressStyle = pingType
         self.pinger.start()
-        self.isPluginRunning = true
+        self.isRunning = true
 
         if interval.second > 0 {
             sendTimer = Timer(timeInterval: interval.second, repeats: true, block: { [weak self] (_) in
@@ -170,6 +169,7 @@ private extension HDPingTools {
         //停止发送ping
         sendTimer?.invalidate()
         sendTimer = nil
+        self.isRunning = false
 
         #if canImport(ZXKitCore)
         ZXKit.resetFloatButton()
@@ -181,7 +181,6 @@ private extension HDPingTools {
     //ping完成一次之后的清理，ping成功或失败均会调用
     func _complete() {
         self.pinger.stop()
-        self.isPluginRunning = false
         self.isPing = false
         lastSendItem = nil
         lastReciveItem = nil

@@ -35,6 +35,10 @@ extension HDPingTools: ZXKitPluginProtocol {
     }
 
     public func start() {
+        if self.isRunning {
+            self.stop()
+            return
+        }
         ZXKit.textField?.placeholder = self.hostName ?? "www.apple.com"
         ZXKit.textField?.text = self.hostName
         ZXKit.showInput { [weak self] (url) in
@@ -60,9 +64,5 @@ extension HDPingTools: ZXKitPluginProtocol {
                 }
             }
         }
-    }
-    
-    public var isRunning: Bool {
-        return self.isPluginRunning
     }
 }
