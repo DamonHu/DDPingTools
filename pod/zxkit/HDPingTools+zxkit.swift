@@ -40,7 +40,7 @@ extension HDPingTools: ZXKitPluginProtocol {
             return
         }
         ZXKit.showInput(placeholder: self.hostName ?? "www.apple.com", text: self.hostName) { [weak self] (url) in
-            guard let self = self else { return }
+            guard let self = self, !url.isEmpty else { return }
             self.hostName = url
             ZXKit.hide()
             ZXKitLogger.show()

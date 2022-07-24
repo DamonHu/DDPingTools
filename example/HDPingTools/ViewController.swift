@@ -42,8 +42,8 @@ class ViewController: UIViewController {
             }
 //        }
 
-//        ZXKit.regist(plugin: pingTools)
-//        ZXKit.show()
+        ZXKit.regist(plugin: pingTools)
+        ZXKit.show()
     }
 
     @objc func stop() {
