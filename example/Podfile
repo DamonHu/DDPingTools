@@ -6,5 +6,5 @@ target 'HDPingTools' do
   use_frameworks!
 
   # Pods for HDPingTools
-  pod 'ZXKitLogger/zxkit'
+  
 end

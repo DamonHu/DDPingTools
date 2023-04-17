@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ZXKitCore
 
 class ViewController: UIViewController {
     let pingTools = HDPingTools(hostName: "www.apple.com")
@@ -32,18 +31,11 @@ class ViewController: UIViewController {
     }
 
     @objc func start() {
-//        if pingTools.isPing {
-//            pingTools.stop()
-//        } else {
-            pingTools.start(pingType: .any, interval: .second(2)) { (response, error) in
-                if let error = error {
-                    print(error)
-                }
+        pingTools.start(pingType: .any, interval: .second(2)) { (response, error) in
+            if let error = error {
+                print(error)
             }
-//        }
-
-        ZXKit.regist(plugin: pingTools)
-        ZXKit.show()
+        }
     }
 
     @objc func stop() {

@@ -16,8 +16,6 @@
 		E45A4A70275F138A004F3271 /* HDPingNetworkActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45A4A6F275F138A004F3271 /* HDPingNetworkActivityIndicator.swift */; };
 		E4AC9680263A6442001FC322 /* HDPingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AC967E263A6442001FC322 /* HDPingTools.swift */; };
 		E4AC9681263A6442001FC322 /* SimplePing.m in Sources */ = {isa = PBXBuildFile; fileRef = E4AC967F263A6442001FC322 /* SimplePing.m */; };
-		E4AC968E263A7E2F001FC322 /* HDPingTools+zxkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AC968D263A7E2F001FC322 /* HDPingTools+zxkit.swift */; };
-		E4AC9693263A7FD9001FC322 /* HDPingTool.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AC9692263A7FD9001FC322 /* HDPingTool.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,8 +35,6 @@
 		E4AC967D263A6442001FC322 /* SimplePing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePing.h; sourceTree = "<group>"; };
 		E4AC967E263A6442001FC322 /* HDPingTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HDPingTools.swift; sourceTree = "<group>"; };
 		E4AC967F263A6442001FC322 /* SimplePing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePing.m; sourceTree = "<group>"; };
-		E4AC968D263A7E2F001FC322 /* HDPingTools+zxkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HDPingTools+zxkit.swift"; sourceTree = "<group>"; };
-		E4AC9692263A7FD9001FC322 /* HDPingTool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HDPingTool.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,19 +99,9 @@
 			path = HDPingTools;
 			sourceTree = "<group>";
 		};
-		E48A7008263AA6B300DB75BF /* icon */ = {
-			isa = PBXGroup;
-			children = (
-				E4AC9692263A7FD9001FC322 /* HDPingTool.png */,
-			);
-			path = icon;
-			sourceTree = "<group>";
-		};
 		E4AC967B263A6442001FC322 /* pod */ = {
 			isa = PBXGroup;
 			children = (
-				E4AC9691263A7FCC001FC322 /* assets */,
-				E4AC968C263A7D9A001FC322 /* zxkit */,
 				E4AC967C263A6442001FC322 /* HDPingTools.h */,
 				E4AC967D263A6442001FC322 /* SimplePing.h */,
 				E4AC967E263A6442001FC322 /* HDPingTools.swift */,
@@ -124,22 +110,6 @@
 			);
 			name = pod;
 			path = ../../pod;
-			sourceTree = "<group>";
-		};
-		E4AC968C263A7D9A001FC322 /* zxkit */ = {
-			isa = PBXGroup;
-			children = (
-				E4AC968D263A7E2F001FC322 /* HDPingTools+zxkit.swift */,
-			);
-			path = zxkit;
-			sourceTree = "<group>";
-		};
-		E4AC9691263A7FCC001FC322 /* assets */ = {
-			isa = PBXGroup;
-			children = (
-				E48A7008263AA6B300DB75BF /* icon */,
-			);
-			path = assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,7 +123,6 @@
 				E4443DF525A2C0DC0063C383 /* Sources */,
 				E4443DF625A2C0DC0063C383 /* Frameworks */,
 				E4443DF725A2C0DC0063C383 /* Resources */,
-				A9952B9499E6677106F9EDFF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,7 +172,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4443E0925A2C0E00063C383 /* LaunchScreen.storyboard in Resources */,
-				E4AC9693263A7FD9001FC322 /* HDPingTool.png in Resources */,
 				E4443E0625A2C0E00063C383 /* Assets.xcassets in Resources */,
 				E4443E0425A2C0DC0063C383 /* Main.storyboard in Resources */,
 			);
@@ -234,23 +202,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A9952B9499E6677106F9EDFF /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HDPingTools/Pods-HDPingTools-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HDPingTools/Pods-HDPingTools-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HDPingTools/Pods-HDPingTools-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -260,7 +211,6 @@
 			files = (
 				E4443E0125A2C0DC0063C383 /* ViewController.swift in Sources */,
 				E4443DFD25A2C0DC0063C383 /* AppDelegate.swift in Sources */,
-				E4AC968E263A7E2F001FC322 /* HDPingTools+zxkit.swift in Sources */,
 				E45A4A70275F138A004F3271 /* HDPingNetworkActivityIndicator.swift in Sources */,
 				E4AC9681263A6442001FC322 /* SimplePing.m in Sources */,
 				E4AC9680263A6442001FC322 /* HDPingTools.swift in Sources */,
