@@ -1,6 +1,0 @@
-framework module Pods_HDPingTools {
-  umbrella header "Pods-HDPingTools-umbrella.h"
-
-  export *
-  module * { export * }
-}
