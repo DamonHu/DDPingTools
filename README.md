@@ -2,7 +2,7 @@
 
 This is an iOS platform for Ping tools, using swift language development. Support the use of cocoapods integration. It can be used in three steps
 
-### [中文文档](https://ddceo.com/blog/1296.html)
+### [中文文档](https://dongge.org/blog/1296.html)
 
 | log | iPhone X状态栏 statusBar |  状态栏 statusBar |
 |----|----|----|
